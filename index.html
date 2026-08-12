@@ -55,27 +55,25 @@
         #porcentaje { font-size: 24px; color: #ff5050; }
         #subtitulo-carga { font-size: 16px; margin-top: 6px; color: #ffcccc; }
 
-        /* RECUADRO CENTRAL PEQUEÑO */
+        /* TEXTO FLOTANTE ARRIBA SIN CUADRADO */
         #mensaje-amor {
             display: none; 
             position: absolute; 
-            top: 50%; 
+            top: 10%; 
             left: 50%; 
-            transform: translate(-50%, -50%); 
-            width: 65%; 
-            max-width: 260px; 
-            background: rgba(25, 0, 0, 0.85); 
-            padding: 15px; 
-            border-radius: 16px; 
-            border: 1.5px solid rgba(255, 50, 50, 0.6); 
+            transform: translateX(-50%); 
+            width: 90%; 
+            max-width: 320px; 
+            background: transparent; 
+            padding: 0; 
+            border: none; 
             color: #fff; 
-            font-size: 15px; 
+            font-size: 16px; 
             text-align: center; 
             font-weight: bold;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); 
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.9), 0 0 20px rgba(255, 0, 0, 0.6);
             z-index: 100; 
             pointer-events: none;
-            backdrop-filter: blur(4px);
         }
     </style>
     <!-- Importar Three.js y OrbitControls -->
@@ -119,11 +117,11 @@
 
         // Rutas exactas a tus 4 fotos subidas a GitHub
         const listaImagenes = [
-    "WhatsApp Image 2026-08-12 at 5.11.50 PM.jpeg",
-    "WhatsApp Image 2026-08-12 at 5.11.52 PM.jpeg",
-    "WhatsApp Image 2026-08-12 at 5.11.51 PM (1).jpeg",
-    "WhatsApp Image 2026-08-12 at 5.11.51 PM.jpeg"
-];
+            "WhatsApp Image 2026-08-12 at 5.11.50 PM.jpeg",
+            "WhatsApp Image 2026-08-12 at 5.11.52 PM.jpeg",
+            "WhatsApp Image 2026-08-12 at 5.11.51 PM (1).jpeg",
+            "WhatsApp Image 2026-08-12 at 5.11.51 PM.jpeg"
+        ];
 
         function initThree() {
             const container = document.getElementById('canvas-container');
