@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universo Rojo de Amor 🔴💖</title>
+    <title>Para mi Amor ❤️</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background-color: #100000; /* Fondo rojo ultra oscuro */
+            background-color: #0d0000; 
             color: #fff; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden; 
             width: 100vw; 
             height: 100vh;
+            touch-action: manipulation;
         }
         #canvas-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
         
@@ -20,304 +21,270 @@
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             text-align: center; z-index: 10;
+            width: 90%;
         }
         .btn-love {
-            padding: 18px 45px; border-radius: 35px; border: none;
-            background: linear-gradient(45deg, #ff0000, #a00000); /* Gradiente rojo fuego */
-            color: white; font-size: 22px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 0 35px rgba(255, 0, 0, 0.9);
+            padding: 12px 30px; 
+            border-radius: 30px; 
+            border: none;
+            background: linear-gradient(45deg, #ff0000, #a00000); 
+            color: white; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7); 
             transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn-love:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(255, 50, 50, 1); }
+        .btn-love:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 50, 50, 0.9); }
 
         #loader {
             display: none; position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%); text-align: center; z-index: 10;
+            width: 80%;
         }
         .spinner {
-            width: 80px; height: 80px;
-            border: 5px solid rgba(255, 0, 0, 0.2);
-            border-top: 5px solid #ff0000;
+            width: 60px; height: 60px; 
+            border: 4px solid rgba(255, 0, 0, 0.2);
+            border-top: 4px solid #ff0000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px auto;
+            margin: 0 auto 10px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #porcentaje { font-size: 24px; color: #ff5050; }
+        #subtitulo-carga { font-size: 16px; margin-top: 6px; color: #ffcccc; }
 
+        /* RECUADRO CENTRAL PEQUEÑO */
         #mensaje-amor {
-            display: none; position: absolute; bottom: 5%; left: 50%;
-            transform: translateX(-50%);
-            background: rgba(40, 0, 0, 0.88); /* Fondo rojo burdeos oscuro */
-            padding: 18px 35px; border-radius: 25px;
-            border: 2px solid rgba(255, 50, 50, 0.8);
-            color: #fff; font-size: 24px; text-align: center; font-weight: bold;
-            box-shadow: 0 0 35px rgba(255, 0, 0, 0.7);
-            z-index: 10; pointer-events: none;
-            backdrop-filter: blur(8px);
+            display: none; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 65%; 
+            max-width: 260px; 
+            background: rgba(25, 0, 0, 0.85); 
+            padding: 15px; 
+            border-radius: 16px; 
+            border: 1.5px solid rgba(255, 50, 50, 0.6); 
+            color: #fff; 
+            font-size: 15px; 
+            text-align: center; 
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); 
+            z-index: 100; 
+            pointer-events: none;
+            backdrop-filter: blur(4px);
         }
     </style>
+    <!-- Importar Three.js y OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
+    <div id="canvas-container"></div>
+
     <div id="ui">
-        <button class="btn-love" id="btn-iniciar" onclick="iniciarCarga()">Toque aquí ❤️✨<br><small style="font-size: 14px; font-weight: normal;">Universo Rojo 🔴✨</small></button>
+        <button class="btn-love" onclick="iniciarCarga()">Haz clic aquí mi amor ❤️</button>
     </div>
 
     <div id="loader">
         <div class="spinner"></div>
-        <h2 id="porcentaje" style="font-size: 32px; color: #ff5050;">0%</h2>
-        <p id="subtitulo-carga" style="font-size: 18px; margin-top: 8px; color: #ffcccc;">Encendiendo el universo rojo... ❤️✨</p>
+        <div id="porcentaje">0%</div>
+        <div id="subtitulo-carga">Cargando nuestras fotos y recuerdos... ❤️</div>
     </div>
 
     <div id="mensaje-amor">
-        ✨❤️ Eres mi universo y mi pasión eterna ❤️✨
+        ✨❤️<br>
+        Eres mi universo y mi pasión eterna ❤️<br>
+        ✨
     </div>
-
-    <div id="canvas-container"></div>
-
-    <!-- Librerías 3D -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
 
     <script>
         let scene, camera, renderer, controls;
+        let particulas, texto3DGroup;
 
-        // TUS FOTOS (asegúrate de tenerlas en la carpeta)
-        const listaImagenes = [
-            'foto1.jpg',
-            'foto2.jpg',
-            'foto3.jpg'
-        ];
-
+        // Lista de frases románticas
         const frasesAmor = [
-            "💖 Eres increíble 💖", "🏡✨ Mi lugar favorito ✨🏡", "💘 Mi corazón te elige 💘",
-            "🌸 Gracias por existir 🌸", "💞 Qué bonito coincidir 💞", "😊❤️ Me haces feliz ❤️😊",
-            "✨🌟 Tu luz me inspira 🌟✨", "👩‍❤️‍👨💖 Siempre contigo 💖👩‍❤️‍👨", "🌈💕 Contigo todo mejora 💕🌈",
-            "👑❤️ Eres mi todo ❤️👑", "♾️💗 Te amo infinitamente 💗♾️", "💍✨ Juntos por siempre ✨💍",
-            "🤍✨ Mi persona favorita ✨🤍", "🌹💖 Simplemente tú 💖🌹", "💘✨ Amor de mi vida ✨💘",
-            "☀️💕 Mi sol en días nublados 💕☀️", "💫💖 Eres mi sueño hecho realidad 💖💫",
-            "⏳💖 Cada segundo a tu lado vale la pena 💖⏳", "🏡💗 Mi hogar eres tú 💗🏡",
-            "🥺❤️ Nunca te vayas de mi vida ❤️🥺", "🌍✨ Haces mi mundo más hermoso ✨🌍",
-            "😊💖 Tu sonrisa es mi favorita 💖😊", "🧩💞 Mi complemento perfecto 💞🧩"
+            "Te amo ❤️", "Eres mi vida ✨", "Mi amor eterno 💖", "Siempre juntos 💍",
+            "Mi lugar favorito eres tú 🌹", "Eres mi sueño hecho realidad 💫",
+            "Cada segundo a tu lado vale la pena 💗", "Amor de mi vida ✨💖",
+            "Gracias por existir 🥰", "Eres mi persona favorita ✨🤍",
+            "Mi corazón te elige 💘", "Juntos por siempre ♾️",
+            "Haces mi mundo más hermoso ✨🌍", "Eres mi todo 👑💖",
+            "Nunca te vayas de mi lado 🥹❤️", "Te amo infinitamente ♾️❤️"
         ];
 
-        function iniciarCarga() {
-            if (typeof THREE === 'undefined') {
-                alert("⚠️ Error: El internet está bloqueando la librería Three.js.");
-                return;
-            }
+        // Rutas exactas a tus 4 fotos subidas a GitHub
+        const listaImagenes = [
+            "WhatsApp Image 2026-08-12 at 5.11.50 PM.jpeg",
+            "WhatsApp Image 2026-08-12 at 5.11.52 PM.jpeg",
+            "WhatsApp Image 2026-08-12 at 5.11.51 PM (1).jpeg",
+            "WhatsApp Image 2026-08-12 at 5.11.51 PM.jpeg"
+        ];
 
-            document.getElementById('ui').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
+        function initThree() {
+            const container = document.getElementById('canvas-container');
 
-            let progreso = 0;
-            const textos = [
-                "Creando estrellas rojas centelleantes... ✨",
-                "Cargando tus recuerdos en rojo... 📸❤️",
-                "Formando el TE AMO incandescente... 💖✨",
-                "Desplegando la galaxia de pasión... 🌟🔴"
-            ];
-            
-            const intervalo = setInterval(() => {
-                progreso += 2;
-                document.getElementById('porcentaje').innerText = progreso + '%';
-                
-                if (progreso % 25 === 0) {
-                    const idx = Math.floor(progreso / 25) - 1;
-                    if(textos[idx]) document.getElementById('subtitulo-carga').innerText = textos[idx];
-                }
-
-                if (progreso >= 100) {
-                    clearInterval(intervalo);
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('mensaje-amor').style.display = 'block';
-                    try {
-                        initGalaxia();
-                    } catch(err) {
-                        alert("Error iniciando la animación 3D: " + err.message);
-                    }
-                }
-            }, 30);
-        }
-
-        function initGalaxia() {
             scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x0d0000, 0.015);
+
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 0, 55);
+            camera.position.set(0, 0, 45);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
 
-            if (THREE.OrbitControls) {
-                controls = new THREE.OrbitControls(camera, renderer.domElement);
-                controls.enableDamping = true;
-                controls.autoRotate = true;
-                controls.autoRotateSpeed = 0.8;
-            }
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 1.0;
 
-            crearTextoTeAmoCentralRoja();
-            crearGalaxiaRoja();
-            crearMensajesFlotantesRoja();
-            crearImagenesFlotantesRoja();
+            crearEfectoFondo();
+            crearTextoTeAmoPuntos();
+            crearFrasesFlotantesRedondas();
+            crearFotosFlotantes();
 
+            window.addEventListener('resize', onWindowResize);
             animate();
         }
 
-        // "TE AMO" EN ROJO BRILLANTE
-        function crearTextoTeAmoCentralRoja() {
+        // Fondo de partículas
+        function crearEfectoFondo() {
+            const numParticulas = 2500;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(numParticulas * 3);
+            const colors = new Float32Array(numParticulas * 3);
+
+            for (let i = 0; i < numParticulas * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 120;
+                positions[i + 1] = (Math.random() - 0.5) * 120;
+                positions[i + 2] = (Math.random() - 0.5) * 120;
+
+                colors[i] = 1.0; 
+                colors[i + 1] = Math.random() * 0.3; 
+                colors[i + 2] = Math.random() * 0.3; 
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.6,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            particulas = new THREE.Points(geometry, material);
+            scene.add(particulas);
+        }
+
+        // Formar "TE AMO" en 3D
+        function crearTextoTeAmoPuntos() {
+            texto3DGroup = new THREE.Group();
+
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = 600;
-            canvas.height = 150;
+            canvas.width = 400;
+            canvas.height = 100;
 
             ctx.fillStyle = 'white';
-            ctx.font = 'Bold 65px Arial';
+            ctx.font = 'bold 60px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText('💖 TE AMO 💖', 300, 90);
+            ctx.fillText('TE AMO', 200, 70);
 
             const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imgData.data;
 
-            const points = [];
+            const puntosGeometria = new THREE.BufferGeometry();
+            const posiciones = [];
+
             for (let y = 0; y < canvas.height; y += 2) {
                 for (let x = 0; x < canvas.width; x += 2) {
                     const alpha = data[(y * canvas.width + x) * 4 + 3];
                     if (alpha > 128) {
-                        points.push({
-                            x: (x - canvas.width / 2) * 0.11,
-                            y: -(y - canvas.height / 2) * 0.11,
-                            z: (Math.random() - 0.5) * 2.5
-                        });
+                        const posX = (x - canvas.width / 2) * 0.12;
+                        const posY = -(y - canvas.height / 2) * 0.12;
+                        const posZ = (Math.random() - 0.5) * 2;
+                        posiciones.push(posX, posY, posZ);
                     }
                 }
             }
 
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(points.length * 3);
-            const colors = new Float32Array(points.length * 3);
-
-            points.forEach((p, i) => {
-                positions[i * 3] = p.x;
-                positions[i * 3 + 1] = p.y;
-                positions[i * 3 + 2] = p.z;
-
-                // Color Rojo Puro Brillante
-                colors[i * 3] = 1.0;
-                colors[i * 3 + 1] = 0.1;
-                colors[i * 3 + 2] = 0.1;
-            });
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            puntosGeometria.setAttribute('position', new THREE.Float32BufferAttribute(posiciones, 3));
 
             const material = new THREE.PointsMaterial({
-                size: 0.4,
-                vertexColors: true,
+                color: 0xff0022,
+                size: 0.45,
                 transparent: true,
-                opacity: 0.98
+                opacity: 0.9
             });
 
-            const textMesh = new THREE.Points(geometry, material);
-            scene.add(textMesh);
+            const puntosMesh = new THREE.Points(puntosGeometria, material);
+            texto3DGroup.add(puntosMesh);
+            scene.add(texto3DGroup);
         }
 
-        // GALAXIA DE 6500 ESTRELLAS ROJAS
-        function crearGalaxiaRoja() {
-            const count = 6500;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
-
-            for (let i = 0; i < count * 3; i += 3) {
-                const r = 18 + Math.random() * 48;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = (Math.random() - 0.5) * Math.PI;
-
-                positions[i] = r * Math.cos(theta) * Math.cos(phi);
-                positions[i+1] = r * Math.sin(phi);
-                positions[i+2] = r * Math.sin(theta) * Math.cos(phi);
-
-                // Gradiente espacial rojo, carmesí y rosa fuerte
-                colors[i] = 1.0; 
-                colors[i+1] = Math.random() * 0.3; // Muy poco verde
-                colors[i+2] = Math.random() * 0.4; // Un poco de azul para tono rosa
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            const material = new THREE.PointsMaterial({
-                size: 0.32, 
-                vertexColors: true, 
-                transparent: true, 
-                opacity: 0.9,
-                blending: THREE.AdditiveBlending
-            });
-
-            const particles = new THREE.Points(geometry, material);
-            scene.add(particles);
-
-            // Luz ambiental roja cálida
-            const ambientLight = new THREE.PointLight(0xff0000, 2.5, 110);
-            scene.add(ambientLight);
-        }
-
-        // MENSAJES CON RESPLANDOR ROJO
-        function crearMensajesFlotantesRoja() {
+        // Frases románticas
+        function crearFrasesFlotantesRedondas() {
             frasesAmor.forEach((texto) => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                canvas.width = 800;
-                canvas.height = 180;
+                canvas.width = 512;
+                canvas.height = 128;
 
+                ctx.font = 'bold 28px Arial';
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'Bold 42px Arial';
                 ctx.textAlign = 'center';
-                ctx.shadowColor = '#ff0000'; // Resplandor rojo neón
-                ctx.shadowBlur = 22;
-                ctx.fillText(texto, 400, 95);
+                ctx.shadowColor = '#ff0033';
+                ctx.shadowBlur = 12;
+                ctx.fillText(texto, 256, 64);
 
                 const texture = new THREE.CanvasTexture(canvas);
                 const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+
                 const sprite = new THREE.Sprite(spriteMaterial);
 
-                const r = 18 + Math.random() * 28;
+                const r = 18 + Math.random() * 16;
                 const theta = Math.random() * Math.PI * 2;
-                const phi = (Math.random() - 0.5) * Math.PI * 0.85;
+                const phi = (Math.random() - 0.5) * Math.PI * 0.8;
 
                 sprite.position.x = r * Math.cos(theta) * Math.cos(phi);
                 sprite.position.y = r * Math.sin(phi);
                 sprite.position.z = r * Math.sin(theta) * Math.cos(phi);
 
-                sprite.scale.set(16, 3.6, 1);
+                sprite.scale.set(10, 2.5, 1);
                 scene.add(sprite);
             });
         }
 
-        // FOTOS CON BORDE/AURA ROJA CÁLIDA
-        function crearImagenesFlotantesRoja() {
+        // Cargar y hacer orbitar tus 4 fotos
+        function crearFotosFlotantes() {
             const textureLoader = new THREE.TextureLoader();
 
-            listaImagenes.forEach((url) => {
-                textureLoader.load(url, (texture) => {
-                    // SpriteMaterial con color rojo base suave para teñir la foto
-                    const spriteMaterial = new THREE.SpriteMaterial({ 
-                        map: texture, 
-                        transparent: true,
-                        color: 0xffcccc // Tinte rojo pálido suave
+            listaImagenes.forEach((url, index) => {
+                textureLoader.load(encodeURIComponent(url), (texture) => {
+                    const spriteMaterial = new THREE.SpriteMaterial({
+                        map: texture,
+                        transparent: true
                     });
+
                     const sprite = new THREE.Sprite(spriteMaterial);
 
-                    const r = 14 + Math.random() * 20;
-                    const theta = Math.random() * Math.PI * 2;
-                    const phi = (Math.random() - 0.5) * Math.PI * 0.8;
+                    const angle = (index / listaImagenes.length) * Math.PI * 2;
+                    const radius = 22;
 
-                    sprite.position.x = r * Math.cos(theta) * Math.cos(phi);
-                    sprite.position.y = r * Math.sin(phi);
-                    sprite.position.z = r * Math.sin(theta) * Math.cos(phi);
+                    sprite.position.x = radius * Math.cos(angle);
+                    sprite.position.y = (Math.random() - 0.5) * 8;
+                    sprite.position.z = radius * Math.sin(angle);
 
-                    sprite.scale.set(8.5, 8.5, 1);
+                    sprite.scale.set(8, 10, 1);
                     scene.add(sprite);
                 });
             });
@@ -325,17 +292,52 @@
 
         function animate() {
             requestAnimationFrame(animate);
+
             if (controls) controls.update();
-            renderer.render(scene, camera);
+
+            if (particulas) {
+                particulas.rotation.y += 0.0008;
+            }
+
+            if (texto3DGroup) {
+                texto3DGroup.rotation.y = Math.sin(Date.now() * 0.001) * 0.15;
+            }
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
         }
 
-        window.addEventListener('resize', () => {
+        function onWindowResize() {
             if (camera && renderer) {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
-        });
+        }
+
+        function iniciarCarga() {
+            document.getElementById('ui').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+
+            let porcentaje = 0;
+            const elemPorcentaje = document.getElementById('porcentaje');
+
+            const intervalo = setInterval(() => {
+                porcentaje += Math.floor(Math.random() * 8) + 3;
+                if (porcentaje >= 100) {
+                    porcentaje = 100;
+                    clearInterval(intervalo);
+
+                    setTimeout(() => {
+                        document.getElementById('loader').style.display = 'none';
+                        document.getElementById('mensaje-amor').style.display = 'block';
+                        initThree();
+                    }, 400);
+                }
+                elemPorcentaje.innerText = porcentaje + '%';
+            }, 120);
+        }
     </script>
 </body>
 </html>
