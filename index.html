@@ -59,19 +59,19 @@
         #mensaje-amor {
             display: none; 
             position: absolute; 
-            top: 10%; 
+            top: 6%; 
             left: 50%; 
             transform: translateX(-50%); 
             width: 90%; 
-            max-width: 320px; 
+            max-width: 380px; 
             background: transparent; 
             padding: 0; 
             border: none; 
             color: #fff; 
-            font-size: 16px; 
+            font-size: 18px; 
             text-align: center; 
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.9), 0 0 20px rgba(255, 0, 0, 0.6);
+            text-shadow: 0 0 12px rgba(255, 0, 0, 1), 0 0 25px rgba(255, 0, 0, 0.8);
             z-index: 100; 
             pointer-events: none;
         }
@@ -81,6 +81,9 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+
+    <!-- Música de fondo -->
+    <audio id="musica-fondo" loop src="Marc Seguí - Tiroteo Remix ft (mp3cut.net).mp3"></audio>
 
     <div id="canvas-container"></div>
 
@@ -104,7 +107,7 @@
         let scene, camera, renderer, controls;
         let particulas, texto3DGroup;
 
-        // Lista de frases románticas
+        // Lista extendida con muchísimos más mensajes de amor
         const frasesAmor = [
             "Te amo ❤️", "Eres mi vida ✨", "Mi amor eterno 💖", "Siempre juntos 💍",
             "Mi lugar favorito eres tú 🌹", "Eres mi sueño hecho realidad 💫",
@@ -112,7 +115,17 @@
             "Gracias por existir 🥰", "Eres mi persona favorita ✨🤍",
             "Mi corazón te elige 💘", "Juntos por siempre ♾️",
             "Haces mi mundo más hermoso ✨🌍", "Eres mi todo 👑💖",
-            "Nunca te vayas de mi lado 🥹❤️", "Te amo infinitamente ♾️❤️"
+            "Nunca te vayas de mi lado 🥹❤️", "Te amo infinitamente ♾️❤️",
+            "Mi destino eres tú 🌌", "Eres mi luz en la oscuridad 🌟",
+            "Amo tu sonrisa 😍", "Tus abrazos son mi hogar 🏡❤️",
+            "Eres el amor de mis sueños 💭❤️", "Contigo todo es mejor 🌸",
+            "Me haces el hombre más feliz 👑", "Mi corazón es tuyo 💓",
+            "Razones para amar sobra contigo ✨", "Amo cada detalle tuyo 🌹",
+            "Eres lo más lindo de mi vida 💖", "Mi reina hermosa 👑❤️",
+            "Eternamente tuyo 💖", "Gracias por cada momento 🥰",
+            "Tu amor me llena el alma 🌟", "Eres mi galaxia entera 🌌✨",
+            "Juntos contra el mundo 🌎❤️", "Amo tu voz 🥰",
+            "Siempre en mi mente 💭❤️", "Mi mayor bendición 🙏❤️"
         ];
 
         // Rutas exactas a tus 4 fotos subidas a GitHub
@@ -130,7 +143,7 @@
             scene.fog = new THREE.FogExp2(0x0d0000, 0.015);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 0, 45);
+            camera.position.set(0, 0, 48);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -154,15 +167,15 @@
 
         // Fondo de partículas
         function crearEfectoFondo() {
-            const numParticulas = 2500;
+            const numParticulas = 3000;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(numParticulas * 3);
             const colors = new Float32Array(numParticulas * 3);
 
             for (let i = 0; i < numParticulas * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 120;
-                positions[i + 1] = (Math.random() - 0.5) * 120;
-                positions[i + 2] = (Math.random() - 0.5) * 120;
+                positions[i] = (Math.random() - 0.5) * 140;
+                positions[i + 1] = (Math.random() - 0.5) * 140;
+                positions[i + 2] = (Math.random() - 0.5) * 140;
 
                 colors[i] = 1.0; 
                 colors[i + 1] = Math.random() * 0.3; 
@@ -183,19 +196,19 @@
             scene.add(particulas);
         }
 
-        // Formar "TE AMO" en 3D
+        // Formar "TE AMO" en 3D en el centro
         function crearTextoTeAmoPuntos() {
             texto3DGroup = new THREE.Group();
 
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = 400;
-            canvas.height = 100;
+            canvas.width = 512;
+            canvas.height = 128;
 
             ctx.fillStyle = 'white';
-            ctx.font = 'bold 60px Arial';
+            ctx.font = 'bold 70px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText('TE AMO', 200, 70);
+            ctx.fillText('TE AMO', 256, 85);
 
             const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imgData.data;
@@ -219,9 +232,9 @@
 
             const material = new THREE.PointsMaterial({
                 color: 0xff0022,
-                size: 0.45,
+                size: 0.5,
                 transparent: true,
-                opacity: 0.9
+                opacity: 0.95
             });
 
             const puntosMesh = new THREE.Points(puntosGeometria, material);
@@ -229,35 +242,38 @@
             scene.add(texto3DGroup);
         }
 
-        // Frases románticas
+        // Frases románticas más grandes y claras
         function crearFrasesFlotantesRedondas() {
             frasesAmor.forEach((texto) => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                canvas.width = 512;
-                canvas.height = 128;
+                canvas.width = 1024;
+                canvas.height = 256;
 
-                ctx.font = 'bold 28px Arial';
+                // Estilo del texto más grueso, nítido y brillante
+                ctx.font = 'bold 52px Segoe UI, Arial';
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
                 ctx.shadowColor = '#ff0033';
-                ctx.shadowBlur = 12;
-                ctx.fillText(texto, 256, 64);
+                ctx.shadowBlur = 20;
+                ctx.fillText(texto, 512, 128);
 
                 const texture = new THREE.CanvasTexture(canvas);
                 const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
 
                 const sprite = new THREE.Sprite(spriteMaterial);
 
-                const r = 18 + Math.random() * 16;
+                // Distribución amplia por todo el espacio 3D
+                const r = 16 + Math.random() * 24;
                 const theta = Math.random() * Math.PI * 2;
-                const phi = (Math.random() - 0.5) * Math.PI * 0.8;
+                const phi = (Math.random() - 0.5) * Math.PI * 0.95;
 
                 sprite.position.x = r * Math.cos(theta) * Math.cos(phi);
                 sprite.position.y = r * Math.sin(phi);
                 sprite.position.z = r * Math.sin(theta) * Math.cos(phi);
 
-                sprite.scale.set(10, 2.5, 1);
+                // Tamaño aumentado para que se lean bien claritas
+                sprite.scale.set(15, 3.75, 1);
                 scene.add(sprite);
             });
         }
@@ -282,7 +298,7 @@
                     sprite.position.y = (Math.random() - 0.5) * 8;
                     sprite.position.z = radius * Math.sin(angle);
 
-                    sprite.scale.set(8, 10, 1);
+                    sprite.scale.set(8.5, 10.5, 1);
                     scene.add(sprite);
                 });
             });
@@ -315,6 +331,12 @@
         }
 
         function iniciarCarga() {
+            // Reproducir canción al dar clic
+            const audio = document.getElementById('musica-fondo');
+            if (audio) {
+                audio.play().catch(e => console.log("Audio no iniciado: ", e));
+            }
+
             document.getElementById('ui').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
 
