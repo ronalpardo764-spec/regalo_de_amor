@@ -58,16 +58,16 @@
         #mensaje-amor {
             display: none; 
             position: absolute; 
-            top: 6%; 
+            top: 5%; 
             left: 50%; 
             transform: translateX(-50%); 
             width: 90%; 
-            max-width: 380px; 
+            max-width: 400px; 
             background: transparent; 
             padding: 0; 
             border: none; 
             color: #fff; 
-            font-size: 18px; 
+            font-size: 20px; 
             text-align: center; 
             font-weight: bold;
             text-shadow: 0 0 12px rgba(255, 0, 0, 1), 0 0 25px rgba(255, 0, 0, 0.8);
@@ -108,7 +108,7 @@
         let scene, camera, renderer, controls;
         let particulas, texto3DGroup;
 
-        // 40 frases de amor
+        // 100 FRASES DE AMOR
         const frasesAmor = [
             "Te amo ❤️", "Eres mi vida ✨", "Mi amor eterno 💖", "Siempre juntos 💍",
             "Mi lugar favorito eres tú 🌹", "Eres mi sueño hecho realidad 💫",
@@ -128,10 +128,39 @@
             "Juntos contra el mundo 🌎❤️", "Amo tu voz 🥰",
             "Siempre en mi mente 💭❤️", "Mi mayor bendición 🙏❤️",
             "Eres mi razón de ser ❤️", "Contigo hasta el fin del mundo 🪐",
-            "Mi único y verdadero amor 💘", "Te amaré por siempre 💖"
+            "Mi único y verdadero amor 💘", "Te amaré por siempre 💖",
+            "Mi felicidad lleva tu nombre 🥰", "Eres mi calma y mi locura ❤️",
+            "Me enamoras cada día más 🌹", "Tus besos son mi adicción 💋",
+            "Contigo el tiempo vuela ⏳✨", "Eres la mitad que me faltaba 🧩",
+            "Mi lugar seguro eres tú 🛡️❤️", "Amo caminar de tu mano 🤝❤️",
+            "Eres mi inspiración 🎨💖", "No hay nadie como tú ✨",
+            "Nuestra historia es mi favorita 📚❤️", "Me haces bien al alma 🤍",
+            "Eres mi pensamiento favorito 💭", "Estar contigo es mágico ✨",
+            "Te elijo hoy y siempre 💍", "Tu amor me da fuerzas 🦁❤️",
+            "Eres el sol de mis días ☀️", "Mi estrella fugaz hecha realidad 🌠",
+            "Amo cada mirada tuya 👀❤️", "Siento mariposas contigo 🦋",
+            "Eres mi complemento perfecto 💖", "A tu lado todo es perfecto ✨",
+            "Contigo aprendí a amar ❤️", "Eres mi pedacito de cielo ☁️💖",
+            "Mi mundo entero gira hacia ti 🌍", "Gracias por hacerme sonreír 😊",
+            "Eres lo más valioso para mí 💎", "No te cambio por nada 👑",
+            "Tenerte es un regalo del cielo 🎁❤️", "Amo compartir mi vida contigo 💖",
+            "Mi corazón late fuerte por ti 💓", "Eres mi alegría de cada día ☀️",
+            "Amo la forma en que me miras 🥺❤️", "Mi rincón favorito es a tu lado 🏡",
+            "Eres mi presente y mi futuro ⏳❤️", "Contigo hasta la eternidad ♾️",
+            "Eres mi mayor tesoro 💎❤️", "Me encantas por completo 😍",
+            "Amo cuando nos abrazamos fuerte 🤗", "Mi día mejora cuando te veo ✨",
+            "Tu risa es mi sonido favorito 🎶", "No hay distancia que apague esto 🌌",
+            "Eres mi mejor regalo 🎁💖", "Te cuido porque te amo ❤️",
+            "Amo crear recuerdos contigo 📸", "Eres mi motivo para sonreír 💖",
+            "Nacimos para estar juntos 🧩❤️", "Eres mi ángel en la tierra 🪽",
+            "No me canso de mirarte 🥰", "Te amo más de lo que imaginas 💓",
+            "Eres la mejor parte de mi vida ✨", "Mi amor por ti no tiene fin ♾️",
+            "Eres único en este mundo 👑", "Gracias por tanto amor 🥰",
+            "Contigo quiero envejecer 👵👴❤️", "Eres mi mayor suerte 🍀",
+            "Amo todo de ti 🌹", "Simplemente te amo ❤️"
         ];
 
-        // Rutas a tus 4 imágenes
+        // Las 4 imágenes
         const listaImagenes = [
             "WhatsApp Image 2026-08-12 at 5.11.50 PM.jpeg",
             "WhatsApp Image 2026-08-12 at 5.11.52 PM.jpeg",
@@ -143,7 +172,7 @@
             const container = document.getElementById('canvas-container');
 
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x0d0000, 0.015);
+            scene.fog = new THREE.FogExp2(0x0d0000, 0.01);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 0, 48);
@@ -157,11 +186,11 @@
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 1.0;
+            controls.autoRotateSpeed = 1.2;
 
             crearEfectoFondo();
             crearTextoTeAmoPuntos();
-            crearFrasesFlotantesRedondas();
+            crearFrasesFlotantesDistribuidas();
             crearFotosFlotantes();
 
             window.addEventListener('resize', onWindowResize);
@@ -169,19 +198,19 @@
         }
 
         function crearEfectoFondo() {
-            const numParticulas = 3000;
+            const numParticulas = 4000;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(numParticulas * 3);
             const colors = new Float32Array(numParticulas * 3);
 
             for (let i = 0; i < numParticulas * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 140;
-                positions[i + 1] = (Math.random() - 0.5) * 140;
-                positions[i + 2] = (Math.random() - 0.5) * 140;
+                positions[i] = (Math.random() - 0.5) * 160;
+                positions[i + 1] = (Math.random() - 0.5) * 160;
+                positions[i + 2] = (Math.random() - 0.5) * 160;
 
                 colors[i] = 1.0; 
-                colors[i + 1] = Math.random() * 0.3; 
-                colors[i + 2] = Math.random() * 0.3; 
+                colors[i + 1] = Math.random() * 0.2; 
+                colors[i + 2] = Math.random() * 0.2; 
             }
 
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -221,8 +250,8 @@
                 for (let x = 0; x < canvas.width; x += 2) {
                     const alpha = data[(y * canvas.width + x) * 4 + 3];
                     if (alpha > 128) {
-                        const posX = (x - canvas.width / 2) * 0.12;
-                        const posY = -(y - canvas.height / 2) * 0.12;
+                        const posX = (x - canvas.width / 2) * 0.11;
+                        const posY = -(y - canvas.height / 2) * 0.11;
                         const posZ = (Math.random() - 0.5) * 2;
                         posiciones.push(posX, posY, posZ);
                     }
@@ -243,32 +272,38 @@
             scene.add(texto3DGroup);
         }
 
-        function crearFrasesFlotantesRedondas() {
-            frasesAmor.forEach((texto) => {
+        // Distribución uniforme para 100 frases completas
+        function crearFrasesFlotantesDistribuidas() {
+            const totalFrases = frasesAmor.length;
+            const phi = Math.PI * (3 - Math.sqrt(5)); // Espiral matemática esférica
+
+            frasesAmor.forEach((texto, i) => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 canvas.width = 1024;
                 canvas.height = 256;
 
-                ctx.font = 'bold 52px Segoe UI, Arial';
+                ctx.font = 'bold 54px Segoe UI, Arial';
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
                 ctx.shadowColor = '#ff0033';
-                ctx.shadowBlur = 20;
+                ctx.shadowBlur = 18;
                 ctx.fillText(texto, 512, 128);
 
                 const texture = new THREE.CanvasTexture(canvas);
                 const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
-
                 const sprite = new THREE.Sprite(spriteMaterial);
 
-                const r = 16 + Math.random() * 24;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = (Math.random() - 0.5) * Math.PI * 0.95;
+                const y = 1 - (i / (totalFrases - 1)) * 2; 
+                const radiusAtY = Math.sqrt(1 - y * y);
+                const theta = phi * i;
 
-                sprite.position.x = r * Math.cos(theta) * Math.cos(phi);
-                sprite.position.y = r * Math.sin(phi);
-                sprite.position.z = r * Math.sin(theta) * Math.cos(phi);
+                // Variación de profundidad para llenar el frente, lados y fondo
+                const radioGlobal = 16 + (i % 4) * 5; 
+
+                sprite.position.x = Math.cos(theta) * radiusAtY * radioGlobal;
+                sprite.position.y = y * (radioGlobal * 0.85);
+                sprite.position.z = Math.sin(theta) * radiusAtY * radioGlobal;
 
                 sprite.scale.set(15, 3.75, 1);
                 scene.add(sprite);
@@ -288,13 +323,13 @@
                     const sprite = new THREE.Sprite(spriteMaterial);
 
                     const angle = (index / listaImagenes.length) * Math.PI * 2;
-                    const radius = 22;
+                    const radius = 15;
 
                     sprite.position.x = radius * Math.cos(angle);
-                    sprite.position.y = (Math.random() - 0.5) * 8;
+                    sprite.position.y = (index % 2 === 0 ? 3 : -3);
                     sprite.position.z = radius * Math.sin(angle);
 
-                    sprite.scale.set(8.5, 10.5, 1);
+                    sprite.scale.set(8, 10, 1);
                     scene.add(sprite);
                 });
             });
@@ -306,7 +341,7 @@
             if (controls) controls.update();
 
             if (particulas) {
-                particulas.rotation.y += 0.0008;
+                particulas.rotation.y += 0.0006;
             }
 
             if (texto3DGroup) {
@@ -339,7 +374,7 @@
                     porcentaje = 100;
                     clearInterval(intervalo);
 
-                    // Reproducir la música justo al llegar al 100%
+                    // Reproducir música exactamente al 100%
                     const audio = document.getElementById('musica-fondo');
                     if (audio) {
                         audio.play().catch(e => console.log("Error de reproducción:", e));
