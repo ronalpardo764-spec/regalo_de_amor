@@ -81,8 +81,8 @@
 </head>
 <body>
 
-    <!-- REPRODUCTOR DE MÚSICA -->
-    <audio id="musica-fondo" loop preload="auto">
+    <!-- REPRODUCTOR DE MÚSICA CON SOPORTE MÓVIL -->
+    <audio id="musica-fondo" loop playsinline preload="auto">
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
@@ -272,10 +272,9 @@
             scene.add(texto3DGroup);
         }
 
-        // Distribución uniforme para 100 frases completas
         function crearFrasesFlotantesDistribuidas() {
             const totalFrases = frasesAmor.length;
-            const phi = Math.PI * (3 - Math.sqrt(5)); // Espiral matemática esférica
+            const phi = Math.PI * (3 - Math.sqrt(5));
 
             frasesAmor.forEach((texto, i) => {
                 const canvas = document.createElement('canvas');
@@ -298,7 +297,6 @@
                 const radiusAtY = Math.sqrt(1 - y * y);
                 const theta = phi * i;
 
-                // Variación de profundidad para llenar el frente, lados y fondo
                 const radioGlobal = 16 + (i % 4) * 5; 
 
                 sprite.position.x = Math.cos(theta) * radiusAtY * radioGlobal;
@@ -362,6 +360,16 @@
         }
 
         function iniciarCarga() {
+            const audio = document.getElementById('musica-fondo');
+            
+            // Activar permisos de audio en celular con el primer toque
+            if (audio) {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(e => console.log("Audio listo para sonar tras carga"));
+            }
+
             document.getElementById('ui').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
 
@@ -374,10 +382,9 @@
                     porcentaje = 100;
                     clearInterval(intervalo);
 
-                    // Reproducir música exactamente al 100%
-                    const audio = document.getElementById('musica-fondo');
+                    // Reproducir la música sin bloqueo del móvil
                     if (audio) {
-                        audio.play().catch(e => console.log("Error de reproducción:", e));
+                        audio.play().catch(e => console.log("Error al reproducir audio:", e));
                     }
 
                     setTimeout(() => {
