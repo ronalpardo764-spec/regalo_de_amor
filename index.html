@@ -131,7 +131,7 @@
             "Mi único y verdadero amor 💘", "Te amaré por siempre 💖"
         ];
 
-        // Rutas exactas a tus 4 imágenes
+        // Rutas a tus 4 imágenes
         const listaImagenes = [
             "WhatsApp Image 2026-08-12 at 5.11.50 PM.jpeg",
             "WhatsApp Image 2026-08-12 at 5.11.52 PM.jpeg",
@@ -327,12 +327,6 @@
         }
 
         function iniciarCarga() {
-            // Reproducir musica.mp3 al tocar el botón
-            const audio = document.getElementById('musica-fondo');
-            if (audio) {
-                audio.play().catch(e => console.log("Error de reproducción:", e));
-            }
-
             document.getElementById('ui').style.display = 'none';
             document.getElementById('loader').style.display = 'block';
 
@@ -344,6 +338,12 @@
                 if (porcentaje >= 100) {
                     porcentaje = 100;
                     clearInterval(intervalo);
+
+                    // Reproducir la música justo al llegar al 100%
+                    const audio = document.getElementById('musica-fondo');
+                    if (audio) {
+                        audio.play().catch(e => console.log("Error de reproducción:", e));
+                    }
 
                     setTimeout(() => {
                         document.getElementById('loader').style.display = 'none';
