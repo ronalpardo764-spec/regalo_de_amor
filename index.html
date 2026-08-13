@@ -82,8 +82,8 @@
 </head>
 <body>
 
-    <!-- Música de fondo -->
-    <audio id="musica-fondo" loop src="Marc Seguí - Tiroteo Remix ft (mp3cut.net).mp3"></audio>
+    <!-- Elemento de audio apuntando a musica.mp3 -->
+    <audio id="musica-fondo" loop src="musica.mp3" preload="auto"></audio>
 
     <div id="canvas-container"></div>
 
@@ -107,7 +107,7 @@
         let scene, camera, renderer, controls;
         let particulas, texto3DGroup;
 
-        // Lista extendida con muchísimos más mensajes de amor
+        // Lista extendida de frases románticas
         const frasesAmor = [
             "Te amo ❤️", "Eres mi vida ✨", "Mi amor eterno 💖", "Siempre juntos 💍",
             "Mi lugar favorito eres tú 🌹", "Eres mi sueño hecho realidad 💫",
@@ -250,7 +250,6 @@
                 canvas.width = 1024;
                 canvas.height = 256;
 
-                // Estilo del texto más grueso, nítido y brillante
                 ctx.font = 'bold 52px Segoe UI, Arial';
                 ctx.fillStyle = '#ffffff';
                 ctx.textAlign = 'center';
@@ -263,7 +262,6 @@
 
                 const sprite = new THREE.Sprite(spriteMaterial);
 
-                // Distribución amplia por todo el espacio 3D
                 const r = 16 + Math.random() * 24;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = (Math.random() - 0.5) * Math.PI * 0.95;
@@ -272,7 +270,6 @@
                 sprite.position.y = r * Math.sin(phi);
                 sprite.position.z = r * Math.sin(theta) * Math.cos(phi);
 
-                // Tamaño aumentado para que se lean bien claritas
                 sprite.scale.set(15, 3.75, 1);
                 scene.add(sprite);
             });
@@ -331,10 +328,13 @@
         }
 
         function iniciarCarga() {
-            // Reproducir canción al dar clic
+            // Forzar inicio de reproducción de audio al presionar el botón
             const audio = document.getElementById('musica-fondo');
             if (audio) {
-                audio.play().catch(e => console.log("Audio no iniciado: ", e));
+                audio.currentTime = 0;
+                audio.play().then(() => {
+                    console.log("Audio reproduciendo ok");
+                }).catch(e => console.log("Audio bloqueado: ", e));
             }
 
             document.getElementById('ui').style.display = 'none';
