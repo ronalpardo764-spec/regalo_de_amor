@@ -24,7 +24,7 @@
             width: 90%;
         }
         .btn-love {
-            padding: 12px 30px; 
+            padding: 14px 32px; 
             border-radius: 30px; 
             border: none;
             background: linear-gradient(45deg, #ff0000, #a00000); 
@@ -55,7 +55,6 @@
         #porcentaje { font-size: 24px; color: #ff5050; }
         #subtitulo-carga { font-size: 16px; margin-top: 6px; color: #ffcccc; }
 
-        /* TEXTO FLOTANTE ARRIBA SIN CUADRADO */
         #mensaje-amor {
             display: none; 
             position: absolute; 
@@ -82,13 +81,15 @@
 </head>
 <body>
 
-    <!-- Elemento de audio apuntando a musica.mp3 -->
-    <audio id="musica-fondo" loop src="musica.mp3" preload="auto"></audio>
+    <!-- REPRODUCTOR DE MÚSICA -->
+    <audio id="musica-fondo" loop preload="auto">
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="canvas-container"></div>
 
     <div id="ui">
-        <button class="btn-love" onclick="iniciarCarga()">Haz clic aquí mi amor ❤️</button>
+        <button class="btn-love" onclick="iniciarCarga()">Toque aquí mi amor (de RUBEN) ❤️</button>
     </div>
 
     <div id="loader">
@@ -107,7 +108,7 @@
         let scene, camera, renderer, controls;
         let particulas, texto3DGroup;
 
-        // Lista extendida de frases románticas
+        // 40 frases de amor
         const frasesAmor = [
             "Te amo ❤️", "Eres mi vida ✨", "Mi amor eterno 💖", "Siempre juntos 💍",
             "Mi lugar favorito eres tú 🌹", "Eres mi sueño hecho realidad 💫",
@@ -125,10 +126,12 @@
             "Eternamente tuyo 💖", "Gracias por cada momento 🥰",
             "Tu amor me llena el alma 🌟", "Eres mi galaxia entera 🌌✨",
             "Juntos contra el mundo 🌎❤️", "Amo tu voz 🥰",
-            "Siempre en mi mente 💭❤️", "Mi mayor bendición 🙏❤️"
+            "Siempre en mi mente 💭❤️", "Mi mayor bendición 🙏❤️",
+            "Eres mi razón de ser ❤️", "Contigo hasta el fin del mundo 🪐",
+            "Mi único y verdadero amor 💘", "Te amaré por siempre 💖"
         ];
 
-        // Rutas exactas a tus 4 fotos subidas a GitHub
+        // Rutas exactas a tus 4 imágenes
         const listaImagenes = [
             "WhatsApp Image 2026-08-12 at 5.11.50 PM.jpeg",
             "WhatsApp Image 2026-08-12 at 5.11.52 PM.jpeg",
@@ -165,7 +168,6 @@
             animate();
         }
 
-        // Fondo de partículas
         function crearEfectoFondo() {
             const numParticulas = 3000;
             const geometry = new THREE.BufferGeometry();
@@ -196,7 +198,6 @@
             scene.add(particulas);
         }
 
-        // Formar "TE AMO" en 3D en el centro
         function crearTextoTeAmoPuntos() {
             texto3DGroup = new THREE.Group();
 
@@ -242,7 +243,6 @@
             scene.add(texto3DGroup);
         }
 
-        // Frases románticas más grandes y claras
         function crearFrasesFlotantesRedondas() {
             frasesAmor.forEach((texto) => {
                 const canvas = document.createElement('canvas');
@@ -275,7 +275,6 @@
             });
         }
 
-        // Cargar y hacer orbitar tus 4 fotos
         function crearFotosFlotantes() {
             const textureLoader = new THREE.TextureLoader();
 
@@ -328,13 +327,10 @@
         }
 
         function iniciarCarga() {
-            // Forzar inicio de reproducción de audio al presionar el botón
+            // Reproducir musica.mp3 al tocar el botón
             const audio = document.getElementById('musica-fondo');
             if (audio) {
-                audio.currentTime = 0;
-                audio.play().then(() => {
-                    console.log("Audio reproduciendo ok");
-                }).catch(e => console.log("Audio bloqueado: ", e));
+                audio.play().catch(e => console.log("Error de reproducción:", e));
             }
 
             document.getElementById('ui').style.display = 'none';
